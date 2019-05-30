@@ -28,11 +28,15 @@ class App extends React.Component {
 
   addTodo = event => {
     event.preventDefault();
-    let newTodo = {task: this.state.newTask, id: Date.now(), completed: false};
-    this.setState({
-      newTask: '',
-      todoList: [...this.state.todoList, newTodo]
-    });
+    if (this.state.newTask) {
+      let newTodo = {task: this.state.newTask, id: Date.now(), completed: false};
+      this.setState({
+        newTask: '',
+        todoList: [...this.state.todoList, newTodo]
+      });
+    } else {
+      alert('empty');
+    }
   }
 
   handleChanges = (event) => {
@@ -58,6 +62,14 @@ class App extends React.Component {
     })
   }
 
+  clearCompleted = () => {
+    this.setState(prevState => {
+      return {
+        todoList: prevState.todoList.filter(item => !item.completed)
+      }
+    })
+  }
+
   render() {
     return (
       <div className='todo-app'> 
@@ -67,6 +79,7 @@ class App extends React.Component {
           <input placeholder='Task' value={this.state.newTask} onChange={this.handleChanges} />
           <button>Submit</button>
         </form>
+        <button onClick={this.clearCompleted}>Clear Completed</button>
       </div>
     )
   }
